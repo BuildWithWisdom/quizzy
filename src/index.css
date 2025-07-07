@@ -1,22 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --font-inter: "poppins", sans-serif;
+  --font-inter: "Inter", sans-serif;
 
-  --color-primary: "#121212";
-  --color-secondary: "#6B7280";
-  --color-correct: "#D4EDDA";
-  --color-correctText: "#1E7E34";
-  --color-wrong: "#F8D7DA";
-  --color-wrongText: "#842029";
-  --color-faded: "#E5E7EB";
-  --color-blueAccent: "#3B82F6";
-  --color-purpleAccent: "#7B3FF2";
-  --color-background: "#F8F9FC";
+  --color-primary: #121212;
+  --color-secondary: #6B7280;
+  --color-correct: #D4EDDA;
+  --color-correctText: #1E7E34;
+  --color-wrong: #F8D7DA;
+  --color-wrongText: #842029;
+  --color-faded: #E5E7EB;
+  --color-blueAccent: #3B82F6;
+  --color-purpleAccent: #7B3FF2;
+  --color-background: #F8F9FC;
 
-    --shadow-card: '0 6px 20px rgba(0, 0, 0, 0.1)';
-    --shadow-: '0 4px 12px rgba(0, 0, 0, 0.08)';
-    --shadow-option-hover: '0 2px 10px rgba(0, 0, 0, 0.06)';
+    --shadow-card: 0 6px 20px rgba(0, 0, 0, 0.1);
+    --shadow-btn: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-option-hover: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
