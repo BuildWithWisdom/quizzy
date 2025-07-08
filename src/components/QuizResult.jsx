@@ -1,6 +1,8 @@
 import remove from "../assets/remove.png";
 import check from "../assets/check.png";
 function Result({ answeredQuestions, handlePlayAgain }) {
+    let scores = answeredQuestions.map(question => question.options.filter(option => option.isSelected && option.isCorrect).length)
+    let score = scores.reduce((a, b) => a + b, 0);
   let answers = answeredQuestions.map((question, index) => {
     let num = index + 1;
     return (
@@ -72,9 +74,9 @@ function Result({ answeredQuestions, handlePlayAgain }) {
     <>
       <div className="max-w-[700px] w-[700px]">
         <h2 className="text-4xl font-extrabold text-primary mb-8 text-center">
-          You scored <span className="text-purpleAccent">4/5</span>
+          You scored <span className="text-purpleAccent">{score}/5</span>
         </h2>
-        {/* <div className="flex flex-col justify-center gap-2"> */}
+        
             {answers}
         <button
         onClick={handlePlayAgain}

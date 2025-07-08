@@ -1,17 +1,16 @@
 import clsx from "clsx";
 
 function Quiz({ questions, selectOption, nextQuestion, questionNumber }) {
-  const question = questions.map((question, index) => {
-    return (
-      <div
-        key={index}
+    
+    const theQuestion = questions[questionNumber - 1].question;
+  const questionElements = <div
         className="bg-white p-8 rounded-[20px] shadow-card flex flex-col space-y-9 w-150 max-w-150"
       >
         <h2 className="text-[20px] font-semibold text-primary">
-          Question {questionNumber} of 5: {question.question}
+          Question {questionNumber} of 5: {theQuestion}
         </h2>
         <div className="grid grid-cols-2 gap-4">
-          {question.options.map((option) => {
+          {questions[questionNumber - 1].options.map((option) => {
             return (
               <div
                 key={option.answer}
@@ -24,7 +23,7 @@ function Quiz({ questions, selectOption, nextQuestion, questionNumber }) {
               >
                 <button
                   onClick={() =>
-                    selectOption(index, question.options.indexOf(option))
+                    selectOption(questions[questionNumber - 1].options.indexOf(option))
                   }
                   className="cursor-pointer text-base text-primary"
                 >
@@ -42,8 +41,7 @@ function Quiz({ questions, selectOption, nextQuestion, questionNumber }) {
           {questionNumber === 5 ? "Submit" : "Next"}
         </button>
       </div>
-    );
-  });
+    
   return (
     <>
       <div className="text-center pb-8">
@@ -55,7 +53,7 @@ function Quiz({ questions, selectOption, nextQuestion, questionNumber }) {
         </p>
       </div>
 
-      {question}
+      {questionElements}
     </>
   );
 }

@@ -11,147 +11,96 @@ function App() {
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
   const [questionNumber, setQuestionNumber] = useState(1);
 
+  // Function to fetch questions from the API
+  const fetchQuestions = async () => {
+    try {
+      const res = await fetch("https://opentdb.com/api.php?amount=5&category=9&difficulty=easy&type=multiple");
+      const data = await res.json();
+
+      // Check if data.results exists and is an array before mapping
+      if (data && Array.isArray(data.results)) {
+        const newData = data.results.map((newQuestion) => {
+          return {
+            question: newQuestion.question,
+            options: [
+              {
+                answer: newQuestion.correct_answer,
+                isCorrect: true,
+                isSelected: false,
+              },
+              {
+                answer: newQuestion.incorrect_answers[0],
+                isCorrect: false,
+                isSelected: false,
+              },
+              {
+                answer: newQuestion.incorrect_answers[1],
+                isCorrect: false,
+                isSelected: false,
+              },
+              {
+                answer: newQuestion.incorrect_answers[2],
+                isCorrect: false,
+                isSelected: false,
+              },
+            ],
+          };
+        });
+        setQuestions([...newData]);
+      } else {
+        console.error("API response did not contain expected 'results' array:", data);
+        // Optionally, set an error state here to display a message to the user
+      }
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+      // Optionally, set an error state here to display a message to the user
+    }
+  };
+
   useEffect(() => {
-    const data = quizData.map((newQuestion) => {
-      return [
-        {
-          question: newQuestion.question,
-          options: [
-            {
-              answer: newQuestion.correct_answer,
-              isCorrect: true,
-              isSelected: false,
-            },
-            {
-              answer: newQuestion.incorrect_answers[0],
-              isCorrect: false,
-              isSelected: false,
-            },
-            {
-              answer: newQuestion.incorrect_answers[1],
-              isCorrect: false,
-              isSelected: false,
-            },
-            {
-              answer: newQuestion.incorrect_answers[2],
-              isCorrect: false,
-              isSelected: false,
-            },
-          ],
-        },
-      ];
-    });
-    const rondomNum = Math.floor(Math.random() * quizData.length);
-    setQuestions([...data[rondomNum]]);
-  }, []);
+    fetchQuestions();
+  }, []); // Empty dependency array means this runs once on mount
 
   function handleStartQuiz() {
     setStartQuiz(true);
     // console.log(questions)
   }
 
-  function handleSelectAnswer(questionIndex, optionIndex) {
+  function handleSelectAnswer(optionIndex) {
+    // console.log(questions)
+
     // Update the 'questions' state to mark the selected option
-    setQuestions((prevQuestions) => {
-      // Create a new array of questions to maintain immutability
-      const updatedQuestions = prevQuestions.map((question, qIndex) => {
-        // Find the specific question that was interacted with
-        if (qIndex === questionIndex) {
+    setQuestions(prevQuestions => {
+      // Map over the previous questions array to create a new one
+      return prevQuestions.map((question, qIndex) => {
+        // Check if this is the current question being displayed
+        if (qIndex === questionNumber - 1) {
+          // If it is, return a new question object with updated options
           return {
             ...question,
-            // Create a new array of options, marking only the selected one as true
             options: question.options.map((option, oIndex) => {
-              // 'oIndex === optionIndex' ensures only the clicked option is 'isSelected: true'
-              // and all others are 'isSelected: false' for mutual exclusivity.
-              return { ...option, isSelected: oIndex === optionIndex };
-            }),
+              return {
+                ...option,
+                isSelected: oIndex === optionIndex // Mark the selected option as true, others as false
+              }
+            })
           };
         }
+
         return question; // Return other questions unchanged
       });
-
-      // After updating 'questions' state, derive the 'answeredQuestion' from this *updated* state.
-      // This ensures 'answeredQuestion' contains the latest selection.
-      const answeredQuestion = updatedQuestions[questionIndex];
-
-      // Optional: Basic check to ensure an option was actually selected.
-      // This 'if' block might be removed if selection is guaranteed by UI/UX.
-      if (!answeredQuestion.options.some((opt) => opt.isSelected)) {
-        // If no option is selected (e.g., due to an edge case), return the updated questions
-        // without attempting to modify 'answeredQuestions' state.
-        return updatedQuestions;
-      }
-
-      // Update the 'answeredQuestions' state to store the user's selection.
-      // This state holds a record of all questions the user has interacted with.
-      setAnsweredQuestions((prevAnswered) => {
-        // Find if this specific question has been answered before.
-        const existingQuestionIndex = prevAnswered.findIndex(
-          (answered) => answered.question === answeredQuestion.question,
-        );
-
-        if (existingQuestionIndex > -1) {
-          // If the question was already answered, update its entry.
-          // We create a new array to maintain immutability.
-          const newAnswered = [...prevAnswered];
-          // Replace the old answered question object with the newly updated one.
-          newAnswered[existingQuestionIndex] = answeredQuestion;
-          return newAnswered;
-        } else {
-          // If it's a new question being answered for the first time, add it.
-          // Create a new array with the new answered question appended.
-          return [...prevAnswered, answeredQuestion];
-        }
-      });
-
-      // Log the currently processed answered question for debugging.
-      // Note: 'answeredQuestions' in the console.log below will still show the *previous* state
-      // due to React's asynchronous state updates.
-      // console.log("Current answered question being processed:", answeredQuestion);
-      // console.log("Answered questions state (after potential update):", answeredQuestions);
-
-      // Finally, return the 'updatedQuestions' array to become the new 'questions' state.
-      return updatedQuestions;
     });
+
   }
 
   function handleNextQuestion() {
-    const data = quizData.map((newQuestion) => {
-      return [
-        {
-          question: newQuestion.question,
-          options: [
-            {
-              answer: newQuestion.correct_answer,
-              isCorrect: true,
-              isSelected: false,
-            },
-            {
-              answer: newQuestion.incorrect_answers[0],
-              isCorrect: false,
-              isSelected: false,
-            },
-            {
-              answer: newQuestion.incorrect_answers[1],
-              isCorrect: false,
-              isSelected: false,
-            },
-            {
-              answer: newQuestion.incorrect_answers[2],
-              isCorrect: false,
-              isSelected: false,
-            },
-          ],
-        },
-      ];
-    });
-    const rondomNum = Math.floor(Math.random() * quizData.length);
     if (questionNumber === 5) {
-      console.log("You have completed the Questions", answeredQuestions);
+      setAnsweredQuestions(questions)
+      
       setSubmit(true);
       setStartQuiz(false);
       return; // submit feature here
-    } else setQuestions([...data[rondomNum]]);
+    }
     setQuestionNumber((prevNumber) => prevNumber + 1);
   }
 
@@ -160,6 +109,7 @@ function App() {
     setQuestionNumber(1);
     setStartQuiz(true);
     setAnsweredQuestions([]);
+    fetchQuestions(); // Fetch new questions for the next round
   };
 
   return (
