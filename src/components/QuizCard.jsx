@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-function Quiz({ questions, selectOption, nextQuestion, questionNumber }) {
+function Quiz({ questions, selectOption, nextQuestion, questionNumber, prevQuestion }) {
     
     const theQuestion = questions[questionNumber - 1].question;
   const questionElements = <div
@@ -33,13 +33,29 @@ function Quiz({ questions, selectOption, nextQuestion, questionNumber }) {
             );
           })}
         </div>
+        {questionNumber > 1 &&<div className="flex justify-between items-center">
+            <button
+          onClick={prevQuestion}
+          type="button"
+          className="bg-blueAccent text-base text-white rounded-3xl font-semibold shadow-btn hover:shadow-option-hover px-8 py-2 cursor-pointer"
+        >
+          Prev
+        </button>
         <button
           onClick={nextQuestion}
           type="button"
-          className="self-end bg-blueAccent text-base text-white rounded-3xl font-semibold shadow-btn hover:shadow-option-hover px-8 py-2 cursor-pointer"
+          className="bg-blueAccent text-base text-white rounded-3xl font-semibold shadow-btn hover:shadow-option-hover px-8 py-2 cursor-pointer"
         >
           {questionNumber === 5 ? "Submit" : "Next"}
         </button>
+        </div>}
+        {questionNumber === 1 && <button
+          onClick={nextQuestion}
+          type="button"
+          className="bg-blueAccent self-end text-base text-white rounded-3xl font-semibold shadow-btn hover:shadow-option-hover px-8 py-2 cursor-pointer"
+        >
+          {questionNumber === 5 ? "Submit" : "Next"}
+        </button>}
       </div>
     
   return (

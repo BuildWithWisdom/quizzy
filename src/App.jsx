@@ -104,6 +104,14 @@ function App() {
     setQuestionNumber((prevNumber) => prevNumber + 1);
   }
 
+  function handlePrevQuestion() {
+    if(questionNumber === 1) {
+      return
+    }
+    console.log(questionNumber)
+    setQuestionNumber((prevNumber) => prevNumber - 1)
+  }
+
   function handlePlayAgain() {
     setSubmit(false);
     setQuestionNumber(1);
@@ -122,6 +130,7 @@ function App() {
             questions={questions}
             selectOption={handleSelectAnswer}
             nextQuestion={handleNextQuestion}
+            prevQuestion={handlePrevQuestion}
             questionNumber={questionNumber}
           />
         ) : (
