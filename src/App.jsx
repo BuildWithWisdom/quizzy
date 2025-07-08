@@ -108,7 +108,6 @@ function App() {
     if(questionNumber === 1) {
       return
     }
-    console.log(questionNumber)
     setQuestionNumber((prevNumber) => prevNumber - 1)
   }
 
